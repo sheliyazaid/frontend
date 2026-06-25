@@ -131,3 +131,30 @@ export const violationSchema = z.object({
   violationDate: z.string().optional(),
   violationStatus: z.enum(['Open', 'Resolved', 'Waived']).optional(),
 });
+
+export const dailyStaffSchema = z.object({
+  fullName: z.string().min(1, 'Full name is required'),
+  mobile: z.string().min(10, 'Valid mobile required'),
+  address: z.string().optional(),
+  emergencyContact: z.string().optional(),
+  staffType: z.enum(['Maid', 'Cook', 'Driver', 'Cleaner', 'Tutor', 'Newspaper Vendor', 'Milkman', 'Other']),
+  flatIds: z.array(z.string()).min(1, 'Select at least one flat'),
+  workDescription: z.string().optional(),
+  workingTimeSlot: z.string().optional(),
+});
+
+export const guestRequestSchema = z.object({
+  guestName: z.string().min(1, 'Guest name is required'),
+  mobile: z.string().min(10, 'Valid mobile required'),
+  relation: z.string().optional(),
+  visitingDate: z.string().min(1, 'Visit date is required'),
+  expectedArrivalTime: z.string().optional(),
+});
+
+export const deliveryEntrySchema = z.object({
+  deliveryPersonName: z.string().min(1, 'Name is required'),
+  mobile: z.string().optional(),
+  companyName: z.string().min(1, 'Company name is required'),
+  flatId: z.string().min(1, 'Flat is required'),
+  parcelType: z.string().optional(),
+});

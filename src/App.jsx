@@ -26,6 +26,16 @@ import GatePage from './pages/parking/GatePage';
 import EntryLogsPage from './pages/parking/EntryLogsPage';
 import StaffPage from './pages/staff/StaffPage';
 import ResidentHome from './pages/resident/ResidentHome';
+import GuestRequestsPage from './pages/resident/GuestRequestsPage';
+import VisitorDashboard from './pages/visitors/VisitorDashboard';
+import VisitorLogsPage from './pages/visitors/VisitorLogsPage';
+import ApprovalsPage from './pages/visitors/ApprovalsPage';
+import DailyStaffPage from './pages/visitors/DailyStaffPage';
+import LiveVisitorsPage from './pages/visitors/LiveVisitorsPage';
+import VisitorScanPage from './pages/visitors/VisitorScanPage';
+import DeliveryEntryPage from './pages/visitors/DeliveryEntryPage';
+import RegisterStaffPage from './pages/visitors/RegisterStaffPage';
+import WatchmanDashboard from './pages/visitors/WatchmanDashboard';
 import LoadingSpinner from './components/ui/LoadingSpinner';
 
 function HomeRedirect() {
@@ -75,11 +85,25 @@ export default function App() {
         <Route path="/parking/logs" element={<RoleRoute roles={['Admin']}><EntryLogsPage /></RoleRoute>} />
         <Route path="/staff" element={<RoleRoute roles={['Admin']}><StaffPage /></RoleRoute>} />
 
-        {/* Watchman (+ Admin can test gate) */}
+        {/* Visitors — Admin */}
+        <Route path="/visitors" element={<RoleRoute roles={['Admin']}><VisitorDashboard /></RoleRoute>} />
+        <Route path="/visitors/approvals" element={<RoleRoute roles={['Admin']}><ApprovalsPage /></RoleRoute>} />
+        <Route path="/visitors/live" element={<RoleRoute roles={['Admin']}><LiveVisitorsPage /></RoleRoute>} />
+        <Route path="/visitors/daily-staff" element={<RoleRoute roles={['Admin']}><DailyStaffPage /></RoleRoute>} />
+        <Route path="/visitors/logs" element={<RoleRoute roles={['Admin']}><VisitorLogsPage /></RoleRoute>} />
+
+        {/* Visitors — Watchman (+ Admin) */}
+        <Route path="/visitors/watchman" element={<RoleRoute roles={['Admin', 'Watchman']}><WatchmanDashboard /></RoleRoute>} />
+        <Route path="/visitors/scan" element={<RoleRoute roles={['Admin', 'Watchman']}><VisitorScanPage /></RoleRoute>} />
+        <Route path="/visitors/delivery" element={<RoleRoute roles={['Admin', 'Watchman']}><DeliveryEntryPage /></RoleRoute>} />
+        <Route path="/visitors/register-staff" element={<RoleRoute roles={['Admin', 'Watchman']}><RegisterStaffPage /></RoleRoute>} />
+
+        {/* Parking Gate */}
         <Route path="/parking/gate" element={<RoleRoute roles={['Admin', 'Watchman']}><GatePage /></RoleRoute>} />
 
         {/* Resident */}
         <Route path="/resident" element={<RoleRoute roles={['Resident']}><ResidentHome /></RoleRoute>} />
+        <Route path="/resident/guests" element={<RoleRoute roles={['Resident']}><GuestRequestsPage /></RoleRoute>} />
         <Route path="/resident/notices" element={<RoleRoute roles={['Resident']}><ComingSoon title="Notices" /></RoleRoute>} />
       </Route>
       <Route path="*" element={<HomeRedirect />} />

@@ -1,7 +1,7 @@
 export function getHomePath(role) {
   switch (role) {
     case 'Watchman':
-      return '/parking/gate';
+      return '/visitors/watchman';
     case 'Resident':
       return '/resident';
     default:

@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import {
   LayoutDashboard, Users, Car, UserCog, Building2, User, Home, Heart, Key,
   FileText, StickyNote, Tag, AlarmClock, Upload, Eye, ParkingCircle, ScanLine,
-  ClipboardList, ChevronDown, Bell,
+  ClipboardList, ChevronDown, Bell, UserCheck, Truck, QrCode,
 } from 'lucide-react';
 
 const membersChildren = [
@@ -29,19 +29,34 @@ const adminParkingChildren = [
   { to: '/parking/logs', label: 'Entry Logs', icon: ClipboardList },
 ];
 
+const adminVisitorChildren = [
+  { to: '/visitors', label: 'Overview', icon: LayoutDashboard },
+  { to: '/visitors/approvals', label: 'Approvals', icon: UserCheck },
+  { to: '/visitors/live', label: 'Live Visitors', icon: Users },
+  { to: '/visitors/daily-staff', label: 'Daily Staff', icon: UserCheck },
+  { to: '/visitors/logs', label: 'Entry Logs', icon: ClipboardList },
+  { to: '/visitors/scan', label: 'QR Scanner', icon: QrCode },
+];
+
 const adminNav = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { label: 'Members', icon: Users, children: membersChildren, prefix: '/members' },
   { label: 'Parking', icon: Car, children: adminParkingChildren, prefix: '/parking' },
+  { label: 'Visitors', icon: UserCheck, children: adminVisitorChildren, prefix: '/visitors' },
   { to: '/staff', label: 'Watchman Accounts', icon: UserCog },
 ];
 
 const watchmanNav = [
-  { to: '/parking/gate', label: 'Gate IN / OUT', icon: ScanLine },
+  { to: '/visitors/watchman', label: 'Gate Panel', icon: LayoutDashboard },
+  { to: '/visitors/scan', label: 'QR Scanner', icon: QrCode },
+  { to: '/visitors/delivery', label: 'Delivery Entry', icon: Truck },
+  { to: '/visitors/register-staff', label: 'Register Staff', icon: UserCheck },
+  { to: '/parking/gate', label: 'Vehicle Gate', icon: ScanLine },
 ];
 
 const residentNav = [
   { to: '/resident', label: 'My Home', icon: Home },
+  { to: '/resident/guests', label: 'Guest Requests', icon: Users },
   { to: '/resident/notices', label: 'Notices', icon: Bell },
 ];
 
@@ -91,6 +106,7 @@ export default function Sidebar() {
   const role = user?.role || 'Admin';
   const [membersOpen, setMembersOpen] = useState(location.pathname.startsWith('/members'));
   const [parkingOpen, setParkingOpen] = useState(location.pathname.startsWith('/parking'));
+  const [visitorsOpen, setVisitorsOpen] = useState(location.pathname.startsWith('/visitors'));
 
   const nav = role === 'Watchman' ? watchmanNav : role === 'Resident' ? residentNav : adminNav;
   const panelTitle = role === 'Watchman' ? 'Gate Panel' : role === 'Resident' ? 'Resident Portal' : 'Admin Panel';
@@ -112,12 +128,18 @@ export default function Sidebar() {
           {nav.map((item) => {
             if (item.children) {
               const isMembers = item.prefix === '/members';
+              const isParking = item.prefix === '/parking';
+              const isVisitors = item.prefix === '/visitors';
               return (
                 <NavGroup
                   key={item.label}
                   item={item}
-                  isOpen={isMembers ? membersOpen : parkingOpen}
-                  onToggle={() => (isMembers ? setMembersOpen(!membersOpen) : setParkingOpen(!parkingOpen))}
+                  isOpen={isMembers ? membersOpen : isParking ? parkingOpen : visitorsOpen}
+                  onToggle={() => {
+                    if (isMembers) setMembersOpen(!membersOpen);
+                    else if (isParking) setParkingOpen(!parkingOpen);
+                    else setVisitorsOpen(!visitorsOpen);
+                  }}
                 />
               );
             }
